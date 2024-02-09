@@ -11,17 +11,25 @@ def get_link(text):
                             f"={text}&from=suggest_post&salary=&ored_clusters=true&area=104&page=1",
                         headers={"user-agent": ua.random}
                         )
+    l_data = []
     if data.status_code != 200:
         return
-
     soup = bs4.BeautifulSoup(data.content, "lxml")
+
     try:
-        page_count = (soup.find("div", attrs={"class": "pager"}).find_all("span", recursive=False)[-1].find("a").text)
+        page_count = int((soup.find("div", attrs={"class": "pager"})
+                         .find_all("span", recursive=False)[-1]
+                         .find("span", recursive=False)).text)
     except:
         return
-    print(soup)
 
-    print(data.text)
+    for page in range(page_count):
+        data = requests.get(url=f"https://chelyabinsk.hh.ru/search/vacancy?text"
+                                f"={text}&from=suggest_post&salary=&ored_clusters=true&area=104&page={page}",
+                            headers={"user-agent": ua.random}
+                            )
+        l_data.append(data.text)
+    print(l_data)
 
 
 def get_resume_data(link):
