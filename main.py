@@ -6,11 +6,16 @@ import json
 import lxml
 import re
 
+region = input()
+def area_num():
+    pass
+
+
 ua = fake_useragent.UserAgent()
 def get_link(text):
-    global ua
-    data = requests.get(url=f"https://chelyabinsk.hh.ru/search/vacancy?text"
-                            f"={text}&from=suggest_post&salary=&ored_clusters=true&area=104&page=1",
+    global ua, area
+    data = requests.get(url=f"https://hh.ru/search/vacancy?text"
+                            f"={text}&from=suggest_post&salary=&ored_clusters=true&area={area}&page=1",
                         headers={"user-agent": ua.random}
                         )
     l_data = []
@@ -28,8 +33,8 @@ def get_link(text):
     # ищем все ссылки (кроме топ работадателей, т.к. div-name разный)
     for page in range(page_count):
         try:
-            data = requests.get(url=f"https://chelyabinsk.hh.ru/search/vacancy?text"
-                                    f"={text}&from=suggest_post&salary=&ored_clusters=true&area=104&page={page}",
+            data = requests.get(url=f"https://hh.ru/search/vacancy?text"
+                                    f"={text}&from=suggest_post&salary=&ored_clusters=true&area={area}&page={page}",
                                 headers={"user-agent": ua.random}
                                 )
             if data.status_code != 200:
@@ -46,8 +51,8 @@ def get_link(text):
     # ищем ссылки на топ-работодателей
     for page in range(page_count):
         try:
-            data = requests.get(url=f"https://chelyabinsk.hh.ru/search/vacancy?text"
-                                    f"={text}&from=suggest_post&salary=&ored_clusters=true&area=104&page={page}",
+            data = requests.get(url=f"https://hh.ru/search/vacancy?text"
+                                    f"={text}&from=suggest_post&salary=&ored_clusters=true&area={area}&page={page}",
                                 headers={"user-agent": ua.random}
                                 )
             if data.status_code != 200:
@@ -112,8 +117,12 @@ def get_vacancy_data(link):
 
 
 if __name__ == "__main__":
-    for link in get_link("python"):
-        print(get_vacancy_data(link), link)
+    pl_list = ["Java", "Python", "C#", "JavaScript", "C++", "Kotlin", "PHP", "Golang", "Perl", "Lua"]
+    for pl in pl_list:
+        for link in get_link(pl):
+            pass
+
+
 
 
 
