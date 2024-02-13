@@ -6,11 +6,8 @@ import json
 import lxml
 import re
 
-region = input()
-def area_num():
-    pass
-
-
+area_dict = {"chelyabinsk": "104", "sbp": "2"} #'' if all Russia
+area = area_dict.get(input(), "")
 ua = fake_useragent.UserAgent()
 def get_link(text):
     global ua, area
@@ -18,9 +15,8 @@ def get_link(text):
                             f"={text}&from=suggest_post&salary=&ored_clusters=true&area={area}&page=1",
                         headers={"user-agent": ua.random}
                         )
-    l_data = []
     if data.status_code != 200:
-        return
+        return "Can't connect to the site (search all vacancy)"
     soup = bs4.BeautifulSoup(data.content, "lxml")
     # ищем кол-во страниц
     try:
@@ -119,8 +115,9 @@ def get_vacancy_data(link):
 if __name__ == "__main__":
     pl_list = ["Java", "Python", "C#", "JavaScript", "C++", "Kotlin", "PHP", "Golang", "Perl", "Lua"]
     for pl in pl_list:
-        for link in get_link(pl):
-            pass
+        pass
+    for link in get_link(pl_list[1]):
+            print(get_vacancy_data(link), link)
 
 
 
